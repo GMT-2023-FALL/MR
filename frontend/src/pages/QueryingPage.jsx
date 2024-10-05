@@ -6,6 +6,9 @@ import Dragger from "antd/lib/upload/Dragger.js";
 import ModelViewer from "../components/ModelViewer.jsx";
 import QueryResultPage from "../components/QueryResultPage.jsx";
 
+// const API_URL = 'http://localhost:8000/query';
+const API_URL = 'api/query';
+
 
 const {Header, Content, Footer} = Layout;
 
@@ -26,7 +29,7 @@ function QueryingPage() {
         formData.append('file', file);
         formData.append('count', number.toString()); // 添加 count 参数
         try {
-            const response = await fetch('api/query', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 body: formData,
             });
@@ -58,7 +61,7 @@ function QueryingPage() {
         formData.append('count', count.toString()); // 添加 count 参数
         formData.append('t', distanceThreshold.toString()); // 添加 t 参数
         try {
-            const response = await fetch('api/query', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 body: formData,
             });

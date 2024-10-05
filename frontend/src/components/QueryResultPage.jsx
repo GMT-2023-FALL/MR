@@ -72,7 +72,7 @@ const QueryResultPage = (props) => {
         dataSource={_data}
         footer={
             <div>
-                <b>ant design</b> footer part
+                <b>过肺回笼</b> 已经抽到底啦！
             </div>
         }
         renderItem={(item) => (
