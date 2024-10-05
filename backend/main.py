@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],     # 允许的HTTP头
 )
 
-@app.post("/query")
+@app.post("/api/query")
 async def upload_obj(
     file: UploadFile = File(...),
     count: int = Form(3),

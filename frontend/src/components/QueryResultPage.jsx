@@ -58,14 +58,6 @@ const CustomListItem = (props) => {
     </List.Item>
 }
 
-const data = Array.from({
-    length: 1,
-}).map((_, i) => ({
-    distance: 11.28,
-    file_path: './normalized_database/AircraftBuoyant/m1344.obj',
-}));
-
-
 const QueryResultPage = (props) => {
     const _data = props.data;
     return <List
@@ -77,12 +69,6 @@ const QueryResultPage = (props) => {
         itemLayout="vertical"
         size="large"
         pagination={false}
-        // pagination={{
-        //     onChange: (page) => {
-        //         console.log(page);
-        //     },
-        //     pageSize: 3,
-        // }}
         dataSource={_data}
         footer={
             <div>

@@ -1,0 +1,10 @@
+# Node modules
+node_modules
+backend/__pycache__
+backend/*.pyc
+frontend/node_modules
+*.env
+.git
+.gitignore
+Dockerfile
+docker-compose.yml

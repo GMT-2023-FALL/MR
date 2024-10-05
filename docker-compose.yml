@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # 前端 Vite 默认端口
+    depends_on:
+      - backend  # 依赖后端服务
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+#    ports:
+#      - "8000:8000"  # 后端 FastAPI 默认端口
+    volumes:
+      - ./backend:/app  # 使开发更方便，实时更新

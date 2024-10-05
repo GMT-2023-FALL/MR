@@ -43,7 +43,7 @@ const ModelViewerInListItem = ({objFilePath}) => {
             <directionalLight position={[10, 10, 10]} intensity={0.5}/>
             <directionalLight position={[-10, -10, -10]} intensity={0.5}/>
             {/*<group ref={modelRef}/>*/}
-            <primitive object={model} ref={modelRef}/>
+            {model && <primitive object={model} ref={modelRef}/>}
             <OrbitControls/> {/* 添加 OrbitControls 组件 */}
         </Canvas>
     );

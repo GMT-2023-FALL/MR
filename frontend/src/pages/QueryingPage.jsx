@@ -11,19 +11,22 @@ const {Header, Content, Footer} = Layout;
 
 function QueryingPage() {
     const [file, setFile] = useState(null);
-    const [count, setCount] = useState(3);
+    const [count, setCount] = useState(5);
     const [distanceThreshold, setDistanceThreshold] = useState(0.1);
     const [resultQuery, setResultQuery] = useState(null);
     const [spinning, setSpinning] = useState(false);
 
-    const customRequest = async ({file, onSuccess, onError}) => {
-        console.log('customRequest:', file, typeof file);
+    const handleOnChangeComplete = async (number) => {
+        if(!file){
+            setCount(number);
+            return
+        }
+        setSpinning(true);
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('count', count.toString()); // 添加 count 参数
-        formData.append('t', distanceThreshold.toString()); // 添加 t 参数
+        formData.append('count', number.toString()); // 添加 count 参数
         try {
-            const response = await fetch('http://localhost:8000/query', {
+            const response = await fetch('api/query', {
                 method: 'POST',
                 body: formData,
             });
@@ -33,29 +36,51 @@ function QueryingPage() {
                 console.log('result:', result, typeof result);
                 setFile(file);
                 setResultQuery(result);
-                onSuccess(result); // 成功回调
-                // message.success(`${file.name} 文件上传成功`);
+                setCount(number);
+                // onSuccess(result); // 成功回调
                 message.success(`${file.name} file uploaded successfully`);
+                setSpinning(false);
+            } else {
+                throw new Error('上传失败');
+            }
+        } catch (error) {
+            setSpinning(false);
+            console.log('上传失败:', error);
+            // onError(error); // 失败回调
+            message.error(`${file.name} file upload failed: ${error.message}`);
+        }
+    }
+
+    const customRequest = async ({file, onSuccess, onError}) => {
+        setSpinning(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('count', count.toString()); // 添加 count 参数
+        formData.append('t', distanceThreshold.toString()); // 添加 t 参数
+        try {
+            const response = await fetch('api/query', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                setTimeout(() => {
+                    setFile(file);
+                    setResultQuery(result);
+                    onSuccess(result); // 成功回调
+                    setSpinning(false);
+                    message.success(`${file.name} file uploaded successfully`);
+                }, 3000);
             } else {
                 // onError('上传失败');
                 throw new Error('上传失败');
             }
         } catch (error) {
             console.log('上传失败:', error);
+            setSpinning(false);
             onError(error); // 失败回调
-            // message.error(`${file.name} 文件上传失败: ${error.message}`);
             message.error(`${file.name} file upload failed: ${error.message}`);
-        }
-    };
-
-    const handleUpload = (info) => {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
         }
     };
 
@@ -94,26 +119,6 @@ function QueryingPage() {
         },
     };
 
-    const Desc = (props) => (
-        <Flex
-            justify="center"
-            align="center"
-            style={{
-                height: '100%',
-            }}
-        >
-            <Typography.Title
-                type="secondary"
-                level={5}
-                style={{
-                    whiteSpace: 'nowrap',
-                }}
-            >
-                {props.text}
-            </Typography.Title>
-        </Flex>
-    );
-
     return (
         <Layout style={{minHeight: '100vh', width: 'auto'}}>
             <Spin percent={'auto'} size="large" spinning={spinning}>
@@ -121,7 +126,7 @@ function QueryingPage() {
                 <h1 style={{
                     backgroundColor:'transparent',
 
-                }}>以图搜图 - .obj 文件上传与搜索</h1>
+                }}>MR - Querying Application</h1>
             </Header>
             <Content style={{padding: '20px', minHeight: '100vh'}}>
                 <Splitter
@@ -153,19 +158,12 @@ function QueryingPage() {
                                         marks={
                                             {
                                                 1: '1',
-                                                3: '3',
+                                                5: '5',
                                                 10: '10',
                                             }
                                         }
-                                        defaultValue={3}
-                                        onChangeComplete={(number) => {
-                                            console.log('count:', number);
-                                            setCount(number);
-                                            setSpinning(true);
-                                            setTimeout(() => {
-                                                setSpinning(false);
-                                            }, 3000);
-                                        }}/>
+                                        defaultValue={count}
+                                        onChangeComplete={handleOnChangeComplete}/>
                                     <Dragger {...uploaderProps}>
                                         <p className="ant-upload-drag-icon">
                                             <InboxOutlined/>
@@ -215,7 +213,7 @@ function QueryingPage() {
 
             </Content>
             <Footer style={{textAlign: 'center'}}>
-                React Ant Design 以图搜图界面 ©2024
+                ©2024 扎不多得嘞 - Querying Application - 噪称冯得
             </Footer>
             </Spin>
         </Layout>
