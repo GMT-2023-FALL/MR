@@ -4,36 +4,36 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import pairwise_distances
 
 # 预读取
-df = pd.read_csv('normalized_database.csv')
-scaler = StandardScaler()
-# 选择特征
-feature_columns = ['num_vertices', 'num_faces', 'face_types', 'bounding_box']
-X = df[feature_columns]
-# 标准化
-X_scaled = scaler.fit_transform(X)
+# df = pd.read_csv('normalized_database.csv')
+# scaler = StandardScaler()
+# # 选择特征
+# feature_columns = ['num_vertices', 'num_faces', 'face_types', 'bounding_box']
+# X = df[feature_columns]
+# # 标准化
+# X_scaled = scaler.fit_transform(X)
 
 
-def get_distance(target_features, method='euclidean'):
-    # 选择计算方法
-    if method == 'euclidean':
-        distances = pairwise_distances([target_features], X_scaled, metric='euclidean')[0]
-    elif method == 'cosine':
-        distances = pairwise_distances([target_features], X_scaled, metric='cosine')[0]
-    elif method == 'earth_mover':
-        distances = pairwise_distances([target_features], X_scaled, metric='manhattan')[0]
-    else:
-        raise ValueError("Invalid method")
-    distance_df = pd.DataFrame({
-        'index': df.index,
-        'distance': distances
-    })
-    # 获取距离最小的 10 个条目
-    top_10 = distance_df.nsmallest(10, 'distance').copy()
-    # 获取top_10 的文件路径
-    top_10['file_path'] = df.loc[top_10['index'], 'file_path'].values
-    # 将文件路径和距离转换为字典
-    result = top_10[['file_path', 'distance']].to_dict(orient='records')
-    return result
+# def get_distance(target_features, method='euclidean'):
+#     # 选择计算方法
+#     if method == 'euclidean':
+#         distances = pairwise_distances([target_features], X_scaled, metric='euclidean')[0]
+#     elif method == 'cosine':
+#         distances = pairwise_distances([target_features], X_scaled, metric='cosine')[0]
+#     elif method == 'earth_mover':
+#         distances = pairwise_distances([target_features], X_scaled, metric='manhattan')[0]
+#     else:
+#         raise ValueError("Invalid method")
+#     distance_df = pd.DataFrame({
+#         'index': df.index,
+#         'distance': distances
+#     })
+#     # 获取距离最小的 10 个条目
+#     top_10 = distance_df.nsmallest(10, 'distance').copy()
+#     # 获取top_10 的文件路径
+#     top_10['file_path'] = df.loc[top_10['index'], 'file_path'].values
+#     # 将文件路径和距离转换为字典
+#     result = top_10[['file_path', 'distance']].to_dict(orient='records')
+#     return result
 
 
 def query_service(file, count):
