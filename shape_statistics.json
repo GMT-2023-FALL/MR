@@ -1,0 +1,9 @@
+[
+    {
+        "file_path": "./ShapeDatabase_INFOMR-master/AircraftBuoyant/m1337.obj",
+        "genre": "AircraftBuoyant",
+        "shape_name": "m1337",
+        "num_vertices": 201,
+        "num_faces": 340,
+        "face_types": "triangles",
+        "bounding_box": 
