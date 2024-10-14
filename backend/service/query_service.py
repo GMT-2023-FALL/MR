@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import pairwise_distances
 
-# 预读取
+# # 预读取
 # df = pd.read_csv('normalized_database.csv')
 # scaler = StandardScaler()
 # # 选择特征
@@ -11,8 +11,8 @@ from sklearn.metrics import pairwise_distances
 # X = df[feature_columns]
 # # 标准化
 # X_scaled = scaler.fit_transform(X)
-
-
+#
+#
 # def get_distance(target_features, method='euclidean'):
 #     # 选择计算方法
 #     if method == 'euclidean':
@@ -41,12 +41,8 @@ def query_service(file, count):
     file.file.seek(0)
     # 使用 trimesh 加载上传的 .obj 文件
     mesh = trimesh.load(file.file, file_type='obj')
-    # num_vertices = len(mesh.vertices)
-    # num_faces = len(mesh.faces)
-    # face_types = mesh.faces.shape[1]  # 3 for triangles, 4 for quads
-    # bounding_box = mesh.bounding_box.extents.tolist()
-    # print("Number of vertices: ", num_vertices, "Number of faces: ", num_faces, "Face types: ", face_types,
-    #       "Bounding box: ", bounding_box)
+    # target_features = extract_features(mesh)
+    # get_distance(target_features, method='euclidean')
     # TODO 返回查询后的数据
     # 模拟返回一个固定的 JSON 列表
     mock_response = [
