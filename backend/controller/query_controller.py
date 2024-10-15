@@ -10,5 +10,6 @@ def query_controller(file, count):
     try:
         return query_service(file, count)
     except Exception as e:
+        print(e)
         # 返回错误信息
         raise HTTPException(status_code=500, detail=str(e))
