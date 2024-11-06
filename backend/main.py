@@ -21,9 +21,9 @@ app.add_middleware(
 )
 
 @app.post("/api/query")
-# @app.post("/query")
-async def upload_obj(file: UploadFile = File(...),count: int = Form(5)):
-    return query_controller(file, count)
+#@app.post("/query")
+async def upload_obj(file: UploadFile = File(...),count: int = Form(5), method: str = Form(...)):
+    return query_controller(file, count, method)
 
 
 if __name__ == "__main__":

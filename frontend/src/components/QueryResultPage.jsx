@@ -4,6 +4,7 @@ import ModelViewerInListItem from "./ModelViewerInListItem.jsx";
 
 const StatisticItem = (props) => {
     const {file_path, distance} = props;
+    console.log(file_path, distance)
     return  <Col gutter={16}>
         <Row style={{ marginBottom: '8px' }}> {/* 设置底部间距 */}
             <Col span={24}>
@@ -25,7 +26,7 @@ const StatisticItem = (props) => {
                 <Card bordered={false}>
                     <Statistic
                         title="Path"
-                        value={file_path.split('/')[2] + '/' + file_path.split('/')[3].split('.')[0]}
+                        value={file_path}
                         precision={2}
                         valueStyle={{
                             color: '#cf1322',
@@ -42,9 +43,9 @@ const StatisticItem = (props) => {
 
 const CustomListItem = (props) => {
     const {file_path, distance} = props;
-    let genre = file_path.split('/')[2];
-    let file_name = file_path.split('/')[3];
-    let nw_path = '/normalized_database/' + genre + '/' + file_name;
+    let genre = file_path.split('/')[0];
+    let file_name = file_path.split('/')[1];
+    let nw_path = '/normalized_database/' + genre + '/' + file_name + '.obj';
 
     return <List.Item style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <Row style={{ width: '85%',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

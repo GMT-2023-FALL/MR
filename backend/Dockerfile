@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 复制后端依赖文件并安装
 COPY requirements.txt ./
-RUN pip install --upgrade pip
+RUN pip install -U pip
 RUN pip install -r requirements.txt
 
 # 复制后端源代码

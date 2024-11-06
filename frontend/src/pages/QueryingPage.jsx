@@ -1,6 +1,6 @@
 // src/App.js
 import React, {useState} from 'react';
-import {Empty, Flex, Layout, message, Slider, Spin, Splitter, Typography} from 'antd';
+import {Empty, Flex, Layout, message, Row, Select, Slider, Space, Spin, Splitter, Typography} from 'antd';
 import {InboxOutlined} from '@ant-design/icons';
 import Dragger from "antd/lib/upload/Dragger.js";
 import ModelViewer from "../components/ModelViewer.jsx";
@@ -18,6 +18,7 @@ function QueryingPage() {
     const [distanceThreshold, setDistanceThreshold] = useState(0.1);
     const [resultQuery, setResultQuery] = useState(null);
     const [spinning, setSpinning] = useState(false);
+    const [method, setMethod] = useState('KNN');
 
     const handleOnChangeComplete = async (number) => {
         if(!file){
@@ -28,6 +29,7 @@ function QueryingPage() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('count', number.toString()); // 添加 count 参数
+        formData.append('method', method); // 添加 t 参数
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
@@ -54,12 +56,49 @@ function QueryingPage() {
         }
     }
 
+    const handleMethodOnChange = async (nwMethod) => {
+        console.log('method:', nwMethod);
+        if (!file) {
+            setMethod(nwMethod);
+            return
+        }
+        setSpinning(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('count', count.toString()); // 添加 count 参数
+        formData.append('method', nwMethod); // 添加 t 参数
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('result:', result, typeof result);
+                setFile(file);
+                setResultQuery(result);
+                setMethod(nwMethod);
+                // onSuccess(result); // 成功回调
+                message.success(`${file.name} file uploaded successfully`);
+                setSpinning(false);
+            } else {
+                throw new Error('上传失败');
+            }
+        } catch (error) {
+            setSpinning(false);
+            console.log('上传失败:', error);
+            // onError(error); // 失败回调
+            message.error(`${file.name} file upload failed: ${error.message}`);
+        }
+    }
+
     const customRequest = async ({file, onSuccess, onError}) => {
         setSpinning(true);
         const formData = new FormData();
         formData.append('file', file);
         formData.append('count', count.toString()); // 添加 count 参数
-        formData.append('t', distanceThreshold.toString()); // 添加 t 参数
+        formData.append('method', method); // 添加 t 参数
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
@@ -152,7 +191,19 @@ function QueryingPage() {
                                     padding: '20px',
 
                                 }}>
+                                    {/*h5 and select should be in a row*/}
                                     <h5>K best-matching shapes</h5>
+                                    <Select
+                                        defaultValue="default"
+                                        value={method}
+                                        style={{width: 120}}
+                                        onChange={handleMethodOnChange}
+                                        options={[
+                                            {value: 'default', label: 'default'},
+                                            {value: 'KNN', label: 'KNN'},
+                                            {value: 'KDTree', label: 'KDTree'},
+                                        ]}
+                                    />
                                     <Slider
                                         style={{width: '80%'}}
                                         step={1}
